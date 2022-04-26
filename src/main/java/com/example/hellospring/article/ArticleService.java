@@ -1,6 +1,7 @@
 package com.example.hellospring.article;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,17 @@ enum status {
 public class ArticleService {
     @Autowired
     ArticleRepository ArticleRepository;
-    public List<Article> getList(String category,String title,int pageIndex,int pageSize) {
-//        if (pageSize==0){
-//            return ArticleRepository.search(category,title,status.active.ordinal());
-//        }
-        return ArticleRepository.search(category,title,status.active.ordinal());
+    public Page<Article> getList(String category, String title, int pageIndex, int pageSize) {
+        if (pageIndex<=0){
+            pageIndex=1;
+        }
+        if (pageSize<0){
+            pageSize=5;
+        }
+        if (pageSize==0){
+            return ArticleRepository.search(category,title,status.active.ordinal(),null);
+        }
+        return ArticleRepository.search(category,title,status.active.ordinal(),PageRequest.of(pageIndex-1,pageSize));
     }
 
     public Article addArticle(Article Article) {

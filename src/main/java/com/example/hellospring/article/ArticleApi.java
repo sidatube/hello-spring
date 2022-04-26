@@ -1,6 +1,7 @@
 package com.example.hellospring.article;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,11 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-enum status2 {
-    unActive,
-    active,
-    deleted
-}
 
 @CrossOrigin
 @RestController
@@ -24,7 +20,7 @@ public class ArticleApi {
     private static Logger LOGGER = Logger.getLogger(ArticleApi.class.getName());
 
     @GetMapping
-    public ResponseEntity<List<Article>> getList(@RequestParam(defaultValue = "") String category, @RequestParam(defaultValue = "") String title,@RequestParam(defaultValue = "1") int pageIndex,@RequestParam(defaultValue = "0") int pageSize) {
+    public ResponseEntity<Page<Article>> getList(@RequestParam(defaultValue = "") String category, @RequestParam(defaultValue = "") String title, @RequestParam(defaultValue = "1") int pageIndex, @RequestParam(defaultValue = "0") int pageSize) {
 //        LOGGER.info(String.format("%s - %s - %d", category, title, status2.active.ordinal()));
 
         return ResponseEntity.ok(articleService.getList(category, title,pageIndex,pageSize));
